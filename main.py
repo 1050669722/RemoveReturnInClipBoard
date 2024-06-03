@@ -61,6 +61,8 @@ def doProcessStr():
 
 
 def main():
+    # processStr()
+
     # app = QApplication([])
     # ui = MainWindow()
     # sys.exit(app.exec_())
