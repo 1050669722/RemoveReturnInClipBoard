@@ -1,9 +1,11 @@
 import pyperclip
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 import pygetwindow as gw
 import keyboard
 import pyautogui
+
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
+from typing import List
 
 
 class MainWindow(QMainWindow):
@@ -20,16 +22,37 @@ class MainWindow(QMainWindow):
         self.show()
 
 
+def removeEmptyStr(components: List[str]):
+    n = len(components)
+    left = right = 0
+    while left < n and right < n:
+        if len(components[left]) == 0:
+            if len(components[right]) != 0:
+                components[left], components[right] = components[right], components[left]
+                left += 1
+            else:
+                right += 1
+        else:
+            left += 1
+        right = max(left, right)
+    del components[left:]
+
+
 def processStr():
     text = pyperclip.paste()
     if isinstance(text, str):
-        components = text.split()
+        components = text.split('\n')
+        removeEmptyStr(components)
         num = len(components)
         res = ""
         if num > 0:
+            k = 0
             for i in range(0, num - 1, 2):
+                k = i
                 if (i < num) and (i + 1 < num):
                     res += components[i] + components[i + 1] + "\n"
+            if k + 2 < num: # 如果还存在落单的component
+                res += components[k + 2] + "\n"
         if len(res) > 0 and res.endswith("\n"):
             res = res[:-1]
         if len(res) == 0:
