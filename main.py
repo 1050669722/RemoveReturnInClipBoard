@@ -1,6 +1,7 @@
 import pyperclip
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
+import pygetwindow as gw
 
 
 class MainWindow(QMainWindow):
@@ -32,10 +33,31 @@ def processStr():
         pyperclip.copy(res)
 
 
+def getActiveWindowTitle():
+    # 获取当前活跃窗口
+    active_window = gw.getActiveWindow()
+    if hasattr(active_window, "title"):
+        return active_window.title
+    else:
+        return ""
+
+
+# def doProcessStr():
+#     lastContent = ""
+#     while True:
+#         if pyperclip.paste() != lastContent:
+#             if getActiveWindowTitle() == "网易有道翻译":
+#                 processStr()
+#                 lastContent = pyperclip.paste()
+#                 break
+
+
 def main():
     app = QApplication([])
     ui = MainWindow()
     sys.exit(app.exec_())
+
+    # doProcessStr()
 
 
 if __name__ == "__main__":
