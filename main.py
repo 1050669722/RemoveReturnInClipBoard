@@ -2,6 +2,8 @@ import pyperclip
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 import pygetwindow as gw
+import keyboard
+import pyautogui
 
 
 class MainWindow(QMainWindow):
@@ -42,22 +44,28 @@ def getActiveWindowTitle():
         return ""
 
 
-# def doProcessStr():
-#     lastContent = ""
-#     while True:
-#         if pyperclip.paste() != lastContent:
-#             if getActiveWindowTitle() == "网易有道翻译":
-#                 processStr()
-#                 lastContent = pyperclip.paste()
-#                 break
+def on_ctrl_c():
+    # print("Ctrl+C was pressed!")
+    # 因为前一次Ctrl+C已经用于触发，所以现在再向机器输入一次Ctrl+C
+    pyautogui.hotkey('ctrl', 'c')
+    doProcessStr()
+
+
+def doProcessStr():
+    # print(pyperclip.paste())
+    # print(getActiveWindowTitle())
+    if getActiveWindowTitle() == "网易有道翻译":
+        processStr()
 
 
 def main():
-    app = QApplication([])
-    ui = MainWindow()
-    sys.exit(app.exec_())
+    # app = QApplication([])
+    # ui = MainWindow()
+    # sys.exit(app.exec_())
 
-    # doProcessStr()
+    keyboard.add_hotkey('ctrl+c', on_ctrl_c)
+    while True:
+        keyboard.wait('ctrl+c') # 单次Ctrl+C会起到触发的作用，但是不会具有复制的作用（因为Ctrl+C已经用掉了，用于触发了），这里存在冒险竞争
 
 
 if __name__ == "__main__":
