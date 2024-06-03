@@ -32,6 +32,8 @@ def processStr():
                     res += components[i] + components[i + 1] + "\n"
         if len(res) > 0 and res.endswith("\n"):
             res = res[:-1]
+        if len(res) == 0:
+            res = text
         pyperclip.copy(res)
 
 
